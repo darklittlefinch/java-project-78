@@ -37,7 +37,9 @@ public class StringSchema {
         if (isRequiredApplied) {
             if (content == null) {
                 return false;
-            } else return !content.equals("");
+            } else {
+                return !content.equals("");
+            }
         }
 
         return true;
@@ -48,7 +50,9 @@ public class StringSchema {
         if (isMinLengthApplied) {
             if (content == null) {
                 return false;
-            } else return content.length() >= minLengthOfString;
+            } else {
+                return content.length() >= minLengthOfString;
+            }
         }
 
         return true;
@@ -59,7 +63,9 @@ public class StringSchema {
         if (isContainsApplied) {
             if (content == null) {
                 return false;
-            } else return content.contains(contentCheck);
+            } else {
+                return content.contains(contentCheck);
+            }
         }
 
         return true;
