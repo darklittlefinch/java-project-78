@@ -1,74 +1,29 @@
 package hexlet.code.schemas;
 
-public class StringSchema {
+import java.util.LinkedHashMap;
 
-    private boolean isRequiredApplied;
-    private boolean isMinLengthApplied;
-    private boolean isContainsApplied;
-    private int minLengthOfString;
-    private String contentCheck;
+public class StringSchema extends BaseSchema {
+
+    private static final String DATA_TYPE = "dataType";
+    private static final String REQUIRED = "required";
+    private static final String MIN_LENGTH = "minLength";
+    private static final String CONTAINS = "contains";
 
     public StringSchema() {
-        isRequiredApplied = false;
-        isMinLengthApplied = false;
-        isContainsApplied = false;
+        checks = new LinkedHashMap<>();
+        addCheck(DATA_TYPE, value -> (value instanceof String) || value == null);
     }
 
     public void required() {
-        isRequiredApplied = true;
+        addCheck(REQUIRED, value -> (value instanceof String) && (!value.equals("")));
     }
 
     public void minLength(int number) {
-        isMinLengthApplied = true;
-        minLengthOfString = number;
+        addCheck(MIN_LENGTH, value -> (value == null) || (value.toString().length() >= number));
     }
 
     public void contains(String string) {
-        isContainsApplied = true;
-        contentCheck = string;
-    }
-
-    public boolean isValid(String content) {
-        return isRequiredPassed(content) && isMinLengthPassed(content) && isContentsPassed(content);
-    }
-
-    private boolean isRequiredPassed(String content) {
-
-        if (isRequiredApplied) {
-            if (content == null) {
-                return false;
-            } else {
-                return !content.equals("");
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isMinLengthPassed(String content) {
-
-        if (isMinLengthApplied) {
-            if (content == null) {
-                return false;
-            } else {
-                return content.length() >= minLengthOfString;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isContentsPassed(String content) {
-
-        if (isContainsApplied) {
-            if (content == null) {
-                return false;
-            } else {
-                return content.contains(contentCheck);
-            }
-        }
-
-        return true;
+        addCheck(CONTAINS, value -> (value != null) && (value.toString().contains(string)));
     }
 
 }
