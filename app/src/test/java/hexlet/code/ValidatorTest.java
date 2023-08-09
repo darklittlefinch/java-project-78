@@ -8,18 +8,19 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidatorTest {
+    private Validator validator;
     private StringSchema stringSchema;
     private NumberSchema numberSchema;
 
     @BeforeEach
     void beforeEach() {
-        Validator validator = new Validator();
-        stringSchema = validator.string();
-        numberSchema = validator.number();
+        validator = new Validator();
     }
 
     @Test
     void stringSchemaTestDefault() {
+        stringSchema = validator.string();
+
         assertThat(stringSchema.isValid(null)).isEqualTo(true);
         assertThat(stringSchema.isValid("")).isEqualTo(true);
         assertThat(stringSchema.isValid("fox")).isEqualTo(true);
@@ -28,6 +29,8 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestRequired() {
+        stringSchema = validator.string();
+
         stringSchema.required();
 
         assertThat(stringSchema.isValid(null)).isEqualTo(false);
@@ -38,9 +41,11 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestMinLength() {
+        stringSchema = validator.string();
+
         stringSchema.minLength(5);
 
-        assertThat(stringSchema.isValid(null)).isEqualTo(false);
+        assertThat(stringSchema.isValid(null)).isEqualTo(true);
         assertThat(stringSchema.isValid("")).isEqualTo(false);
         assertThat(stringSchema.isValid("fox")).isEqualTo(false);
         assertThat(stringSchema.isValid("what does the fox say")).isEqualTo(true);
@@ -52,6 +57,8 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestContains() {
+        stringSchema = validator.string();
+
         stringSchema.contains("fox");
 
         assertThat(stringSchema.isValid(null)).isEqualTo(false);
@@ -71,6 +78,8 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestAllMethods() {
+        stringSchema = validator.string();
+
         stringSchema.required();
         stringSchema.minLength(5);
 
@@ -87,6 +96,8 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestDefault() {
+        numberSchema = validator.number();
+
         assertThat(numberSchema.isValid(null)).isEqualTo(true);
         assertThat(numberSchema.isValid(10)).isEqualTo(true);
         assertThat(numberSchema.isValid(-10)).isEqualTo(true);
@@ -95,6 +106,8 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestRequired() {
+        numberSchema = validator.number();
+
         numberSchema.required();
 
         assertThat(numberSchema.isValid(null)).isEqualTo(false);
@@ -105,9 +118,11 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestPositive() {
+        numberSchema = validator.number();
+
         numberSchema.positive();
 
-        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(null)).isEqualTo(true);
         assertThat(numberSchema.isValid(10)).isEqualTo(true);
         assertThat(numberSchema.isValid(-10)).isEqualTo(false);
         assertThat(numberSchema.isValid("10")).isEqualTo(false);
@@ -115,9 +130,11 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestRange() {
+        numberSchema = validator.number();
+
         numberSchema.range(-10, 0);
 
-        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(null)).isEqualTo(true);
         assertThat(numberSchema.isValid(10)).isEqualTo(false);
         assertThat(numberSchema.isValid(-10)).isEqualTo(true);
         assertThat(numberSchema.isValid("10")).isEqualTo(false);
@@ -125,6 +142,8 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestAllMethods() {
+        numberSchema = validator.number();
+
         numberSchema.required();
         numberSchema.positive();
         numberSchema.range(-10, 0);
