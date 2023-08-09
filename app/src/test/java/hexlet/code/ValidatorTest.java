@@ -1,6 +1,7 @@
 package hexlet.code;
 
 import hexlet.code.schemas.StringSchema;
+import hexlet.code.schemas.NumberSchema;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,11 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidatorTest {
     private StringSchema stringSchema;
+    private NumberSchema numberSchema;
 
     @BeforeEach
     void beforeEach() {
         Validator validator = new Validator();
         stringSchema = validator.string();
+        numberSchema = validator.number();
     }
 
     @Test
@@ -82,4 +85,53 @@ public class ValidatorTest {
         assertThat(stringSchema.isValid("what does the fox say")).isEqualTo(true);
     }
 
+    @Test
+    void numberSchemaTestDefault() {
+        assertThat(numberSchema.isValid(null)).isEqualTo(true);
+        assertThat(numberSchema.isValid(10)).isEqualTo(true);
+        assertThat(numberSchema.isValid(-10)).isEqualTo(true);
+        assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
+
+    @Test
+    void numberSchemaTestRequired() {
+        numberSchema.required();
+
+        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(10)).isEqualTo(true);
+        assertThat(numberSchema.isValid(-10)).isEqualTo(true);
+        assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
+
+    @Test
+    void numberSchemaTestPositive() {
+        numberSchema.positive();
+
+        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(10)).isEqualTo(true);
+        assertThat(numberSchema.isValid(-10)).isEqualTo(false);
+        assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
+
+    @Test
+    void numberSchemaTestRange() {
+        numberSchema.range(-10, 0);
+
+        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(10)).isEqualTo(false);
+        assertThat(numberSchema.isValid(-10)).isEqualTo(true);
+        assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
+
+    @Test
+    void numberSchemaTestAllMethods() {
+        numberSchema.required();
+        numberSchema.positive();
+        numberSchema.range(-10, 0);
+
+        assertThat(numberSchema.isValid(null)).isEqualTo(false);
+        assertThat(numberSchema.isValid(10)).isEqualTo(false);
+        assertThat(numberSchema.isValid(-10)).isEqualTo(false);
+        assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
 }
