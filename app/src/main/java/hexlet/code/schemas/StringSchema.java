@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class StringSchema extends BaseSchema {
+public final class StringSchema extends BaseSchema {
 
     private static final String DATA_TYPE = "dataType";
     private static final String REQUIRED = "required";

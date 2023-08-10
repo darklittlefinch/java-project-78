@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ValidatorTest {
+public final class ValidatorTest {
     private static final Map<String, String> MAP_1 = Map.of(
             "key1",
             "value1",
