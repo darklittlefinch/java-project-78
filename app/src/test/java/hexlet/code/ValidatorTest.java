@@ -2,15 +2,36 @@ package hexlet.code;
 
 import hexlet.code.schemas.StringSchema;
 import hexlet.code.schemas.NumberSchema;
+import hexlet.code.schemas.MapSchema;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ValidatorTest {
+    private static final Map<String, String> MAP_1 = Map.of(
+            "key1",
+            "value1",
+            "key2",
+            "value2",
+            "key3",
+            "value3"
+    );
+    private static final Map<Integer, Integer> MAP_2 = Map.of(
+            1,
+            123,
+            2,
+            456
+    );
+
     private Validator validator;
     private StringSchema stringSchema;
     private NumberSchema numberSchema;
+    private MapSchema mapSchema;
 
     @BeforeEach
     void beforeEach() {
@@ -152,5 +173,49 @@ public class ValidatorTest {
         assertThat(numberSchema.isValid(10)).isEqualTo(false);
         assertThat(numberSchema.isValid(-10)).isEqualTo(false);
         assertThat(numberSchema.isValid("10")).isEqualTo(false);
+    }
+
+    @Test
+    void mapSchemaTestDefault() {
+        mapSchema = validator.map();
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(true);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(true);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(true);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+    }
+
+    @Test
+    void mapSchemaTestRequired() {
+        mapSchema = validator.map();
+        mapSchema.required();
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(false);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(true);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(true);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+    }
+
+    @Test
+    void mapSchemaTestSizeOf() {
+        mapSchema = validator.map();
+        mapSchema.sizeOf(2);
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(true);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+    }
+
+    @Test
+    void mapSchemaTestAllMethods() {
+        mapSchema = validator.map();
+        mapSchema.required();
+        mapSchema.sizeOf(2);
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(false);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
     }
 }
