@@ -208,6 +208,17 @@ public class ValidatorTest {
     }
 
     @Test
+    void mapSchemaTestShape() {
+        mapSchema = validator.map();
+        mapSchema.sizeOf(2);
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(true);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+    }
+
+    @Test
     void mapSchemaTestAllMethods() {
         mapSchema = validator.map();
         mapSchema.required();

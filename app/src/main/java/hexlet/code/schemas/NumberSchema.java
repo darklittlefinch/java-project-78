@@ -1,7 +1,5 @@
 package hexlet.code.schemas;
 
-import java.util.LinkedHashMap;
-
 public class NumberSchema extends BaseSchema {
 
     private static final String DATA_TYPE = "dataType";
