@@ -9,6 +9,9 @@ public class StringSchema extends BaseSchema {
     private static final String MIN_LENGTH = "minLength";
     private static final String CONTAINS = "contains";
 
+    private int minLengthNumber;
+    private String content;
+
     public StringSchema() {
         checks = new LinkedHashMap<>();
         addCheck(DATA_TYPE, value -> (value instanceof String) || value == null);
@@ -19,11 +22,13 @@ public class StringSchema extends BaseSchema {
     }
 
     public void minLength(int number) {
-        addCheck(MIN_LENGTH, value -> (value == null) || (value.toString().length() >= number));
+        minLengthNumber = number;
+        addCheck(MIN_LENGTH, value -> (value == null) || (value.toString().length() >= minLengthNumber));
     }
 
     public void contains(String string) {
-        addCheck(CONTAINS, value -> (value != null) && (value.toString().contains(string)));
+        content = string;
+        addCheck(CONTAINS, value -> (value != null) && (value.toString().contains(content)));
     }
 
 }
