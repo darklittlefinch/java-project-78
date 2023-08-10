@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.StringSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.MapSchema;
@@ -50,9 +51,7 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestRequired() {
-        stringSchema = validator.string();
-
-        stringSchema.required();
+        stringSchema = validator.string().required();
 
         assertThat(stringSchema.isValid(null)).isEqualTo(false);
         assertThat(stringSchema.isValid("")).isEqualTo(false);
@@ -62,9 +61,7 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestMinLength() {
-        stringSchema = validator.string();
-
-        stringSchema.minLength(5);
+        stringSchema = validator.string().minLength(5);
 
         assertThat(stringSchema.isValid(null)).isEqualTo(true);
         assertThat(stringSchema.isValid("")).isEqualTo(false);
@@ -78,9 +75,7 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestContains() {
-        stringSchema = validator.string();
-
-        stringSchema.contains("fox");
+        stringSchema = validator.string().contains("fox");
 
         assertThat(stringSchema.isValid(null)).isEqualTo(false);
         assertThat(stringSchema.isValid("")).isEqualTo(false);
@@ -99,10 +94,7 @@ public class ValidatorTest {
 
     @Test
     void stringSchemaTestAllMethods() {
-        stringSchema = validator.string();
-
-        stringSchema.required();
-        stringSchema.minLength(5);
+        stringSchema = validator.string().required().minLength(5);
 
         assertThat(stringSchema.isValid(null)).isEqualTo(false);
         assertThat(stringSchema.isValid("")).isEqualTo(false);
@@ -127,9 +119,7 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestRequired() {
-        numberSchema = validator.number();
-
-        numberSchema.required();
+        numberSchema = validator.number().required();
 
         assertThat(numberSchema.isValid(null)).isEqualTo(false);
         assertThat(numberSchema.isValid(10)).isEqualTo(true);
@@ -139,9 +129,7 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestPositive() {
-        numberSchema = validator.number();
-
-        numberSchema.positive();
+        numberSchema = validator.number().positive();
 
         assertThat(numberSchema.isValid(null)).isEqualTo(true);
         assertThat(numberSchema.isValid(10)).isEqualTo(true);
@@ -151,9 +139,7 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestRange() {
-        numberSchema = validator.number();
-
-        numberSchema.range(-10, 0);
+        numberSchema = validator.number().range(-10, 0);
 
         assertThat(numberSchema.isValid(null)).isEqualTo(true);
         assertThat(numberSchema.isValid(10)).isEqualTo(false);
@@ -163,11 +149,7 @@ public class ValidatorTest {
 
     @Test
     void numberSchemaTestAllMethods() {
-        numberSchema = validator.number();
-
-        numberSchema.required();
-        numberSchema.positive();
-        numberSchema.range(-10, 0);
+        numberSchema = validator.number().required().positive().range(-10, 0);
 
         assertThat(numberSchema.isValid(null)).isEqualTo(false);
         assertThat(numberSchema.isValid(10)).isEqualTo(false);
@@ -187,8 +169,7 @@ public class ValidatorTest {
 
     @Test
     void mapSchemaTestRequired() {
-        mapSchema = validator.map();
-        mapSchema.required();
+        mapSchema = validator.map().required();
 
         assertThat(mapSchema.isValid(null)).isEqualTo(false);
         assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(true);
@@ -198,10 +179,19 @@ public class ValidatorTest {
 
     @Test
     void mapSchemaTestSizeOf() {
-        mapSchema = validator.map();
-        mapSchema.sizeOf(2);
+        mapSchema = validator.map().sizeOf(2);
 
         assertThat(mapSchema.isValid(null)).isEqualTo(true);
+        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
+        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+    }
+
+    @Test
+    void mapSchemaTestBothMethods() {
+        mapSchema = validator.map().required().sizeOf(2);
+
+        assertThat(mapSchema.isValid(null)).isEqualTo(false);
         assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
         assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
         assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
@@ -210,23 +200,19 @@ public class ValidatorTest {
     @Test
     void mapSchemaTestShape() {
         mapSchema = validator.map();
-        mapSchema.sizeOf(2);
 
-        assertThat(mapSchema.isValid(null)).isEqualTo(true);
-        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
-        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
-        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
-    }
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("name", validator.string().required());
+        schemas.put("age", validator.number().positive());
+        mapSchema.shape(schemas);
 
-    @Test
-    void mapSchemaTestAllMethods() {
-        mapSchema = validator.map();
-        mapSchema.required();
-        mapSchema.sizeOf(2);
+        Map<String, Object> map3 = new HashMap<>();
+        map3.put("name", "Eliza");
+        map3.put("age", 24);
+        assertThat(mapSchema.isValid(map3)).isEqualTo(true);
 
-        assertThat(mapSchema.isValid(null)).isEqualTo(false);
-        assertThat(mapSchema.isValid(new HashMap<>())).isEqualTo(false);
-        assertThat(mapSchema.isValid(MAP_1)).isEqualTo(false);
-        assertThat(mapSchema.isValid(MAP_2)).isEqualTo(true);
+        map3.put("name", 24);
+        map3.put("age", "Eliza");
+        assertThat(mapSchema.isValid(map3)).isEqualTo(false);
     }
 }
