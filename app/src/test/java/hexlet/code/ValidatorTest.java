@@ -179,7 +179,7 @@ public class ValidatorTest {
 
     @Test
     void mapSchemaTestSizeOf() {
-        mapSchema = validator.map().sizeOf(2);
+        mapSchema = validator.map().sizeof(2);
 
         assertThat(mapSchema.isValid(null)).isTrue();
         assertThat(mapSchema.isValid(new HashMap<>())).isFalse();
@@ -189,7 +189,7 @@ public class ValidatorTest {
 
     @Test
     void mapSchemaTestBothMethods() {
-        mapSchema = validator.map().required().sizeOf(2);
+        mapSchema = validator.map().required().sizeof(2);
 
         assertThat(mapSchema.isValid(null)).isFalse();
         assertThat(mapSchema.isValid(new HashMap<>())).isFalse();
