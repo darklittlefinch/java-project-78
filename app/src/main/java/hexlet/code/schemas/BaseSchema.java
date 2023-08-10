@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema {
-    protected static Map<String, Predicate> checks;
+    protected Map<String, Predicate> checks;
 
     public BaseSchema() {
         checks = new LinkedHashMap<>();
@@ -21,7 +21,7 @@ public abstract class BaseSchema {
         return true;
     }
 
-    public static void addCheck(String value, Predicate check) {
+    public void addCheck(String value, Predicate check) {
         checks.put(value, check);
     }
 }
