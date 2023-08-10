@@ -11,7 +11,7 @@ public abstract class BaseSchema {
         checks = new LinkedHashMap<>();
     }
 
-    public boolean isValid(Object value) {
+    public final boolean isValid(Object value) {
 
         for (Predicate validate : checks.values()) {
             if (!validate.test(value)) {
@@ -21,7 +21,7 @@ public abstract class BaseSchema {
         return true;
     }
 
-    public void addCheck(String value, Predicate check) {
+    public final void addCheck(String value, Predicate check) {
         checks.put(value, check);
     }
 }
