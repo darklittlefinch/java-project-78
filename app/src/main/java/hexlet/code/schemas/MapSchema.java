@@ -11,7 +11,6 @@ public class MapSchema extends BaseSchema {
     private int size;
 
     public MapSchema() {
-        checks = new LinkedHashMap<>();
         addCheck(DATA_TYPE, value -> (value instanceof Map) || value == null);
     }
 

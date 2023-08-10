@@ -13,7 +13,6 @@ public class NumberSchema extends BaseSchema {
     private int lastNumber;
 
     public NumberSchema() {
-        checks = new LinkedHashMap<>();
         addCheck(DATA_TYPE, value -> (value instanceof Integer) || (value == null));
     }
 

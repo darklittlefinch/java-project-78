@@ -13,7 +13,6 @@ public class StringSchema extends BaseSchema {
     private String content;
 
     public StringSchema() {
-        checks = new LinkedHashMap<>();
         addCheck(DATA_TYPE, value -> (value instanceof String) || value == null);
     }
 

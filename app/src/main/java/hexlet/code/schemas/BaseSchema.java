@@ -5,7 +5,11 @@ import java.util.LinkedHashMap;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema {
-    protected static Map<String, Predicate> checks = new LinkedHashMap<>();
+    protected static Map<String, Predicate> checks;
+
+    public BaseSchema() {
+        checks = new LinkedHashMap<>();
+    }
 
     public boolean isValid(Object value) {
 
