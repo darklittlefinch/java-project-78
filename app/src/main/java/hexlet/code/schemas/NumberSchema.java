@@ -14,18 +14,21 @@ public class NumberSchema extends BaseSchema {
         addCheck(DATA_TYPE, value -> (value instanceof Integer) || (value == null));
     }
 
-    public void required() {
+    public NumberSchema required() {
         addCheck(REQUIRED, value -> value instanceof Integer);
+        return this;
     }
 
-    public void positive() {
+    public NumberSchema positive() {
         addCheck(POSITIVE, value -> (value == null) || ((int) value > 0));
+        return this;
     }
 
-    public void range(Integer first, Integer last) {
+    public NumberSchema range(Integer first, Integer last) {
         firstNumber = first;
         lastNumber = last;
         addCheck(RANGE, value -> (value == null) || ((int) value >= firstNumber && (int) value <= lastNumber));
+        return this;
     }
 
 }

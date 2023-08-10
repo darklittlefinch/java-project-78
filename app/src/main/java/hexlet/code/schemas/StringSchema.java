@@ -14,18 +14,21 @@ public class StringSchema extends BaseSchema {
         addCheck(DATA_TYPE, value -> (value instanceof String) || value == null);
     }
 
-    public void required() {
+    public StringSchema required() {
         addCheck(REQUIRED, value -> (value instanceof String) && (!value.equals("")));
+        return this;
     }
 
-    public void minLength(int number) {
+    public StringSchema minLength(int number) {
         minLengthNumber = number;
         addCheck(MIN_LENGTH, value -> (value == null) || (value.toString().length() >= minLengthNumber));
+        return this;
     }
 
-    public void contains(String string) {
+    public StringSchema contains(String string) {
         content = string;
         addCheck(CONTAINS, value -> (value != null) && (value.toString().contains(content)));
+        return this;
     }
 
 }

@@ -13,12 +13,14 @@ public class MapSchema extends BaseSchema {
         addCheck(DATA_TYPE, value -> (value instanceof Map) || value == null);
     }
 
-    public void required() {
+    public MapSchema required() {
         addCheck(REQUIRED, value -> value instanceof Map);
+        return this;
     }
 
-    public void sizeOf(int number) {
+    public MapSchema sizeOf(int number) {
         size = number;
         addCheck(SIZE_OF, value -> value == null || ((Map) value).size() == size);
+        return this;
     }
 }
