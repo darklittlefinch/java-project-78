@@ -38,7 +38,7 @@ You can see an example of how StringSchema works here:
 This schema validate Integer objects. To choose this schema write:
 
 ```java
-var schema = validator.string();
+var schema = validator.number();
 ```
 
 NumberSchema has three validation methods:
